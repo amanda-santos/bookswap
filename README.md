@@ -6,7 +6,7 @@
   <img alt="GitHub top language" src="https://img.shields.io/github/languages/top/amanda-santos/bookswap">
 
   <a href="https://www.linkedin.com/in/amandasf/">
-    <img alt="Made by" src="https://img.shields.io/badge/made%20by-Amanda%20Santos-gree">
+    <img alt="Made by" src="https://img.shields.io/badge/made%20by-Amanda%20Santos-and-Carla%Ponciano-gree">
   </a>
   
   <img alt="Repository size" src="https://img.shields.io/github/repo-size/amanda-santos/bookswap">
@@ -30,11 +30,11 @@
   <a href="#-license">License</a>
 </p>
 
-## 👩🏻‍💻👩🏼‍💻 About the project
+## 💛 About the project 💙
 
-<p>BookSwap is a mobile application with the goal of helping readers of all ages to exchange books. The application has a proposal to break the cycle of buying a book, reading it and simply storing it on the shelf. Using BookSwap, readers buy a book, read the book and exchange with any other interested reader.</p>
+<p>📚 BookSwap is a mobile application with the goal of helping readers of all ages to exchange books. The application has a proposal to break the cycle of buying a book, reading it and simply storing it on the shelf. Using BookSwap, readers buy a book, read the book and exchange with any other interested reader.</p>
 
-## 🚀 Technologies
+## 👩🏻‍💻👩🏼‍💻 Technologies
 
 Technologies that we used to develop this project:
 
@@ -61,7 +61,7 @@ Running the frontend:
 
 ## 🖥 Preview
 
-
+📖
 
 ## 🤔 How to contribute
 
@@ -98,4 +98,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-Made with 💜 by Amanda Santos and Carla Ponciano <br />
+Made with 💛💙💛 by Amanda Santos and Carla Ponciano <br />
