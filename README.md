@@ -6,7 +6,7 @@
   <img alt="GitHub top language" src="https://img.shields.io/github/languages/top/amanda-santos/bookswap">
 
   <a href="https://www.linkedin.com/in/amandasf/">
-    <img alt="Made by" src="https://img.shields.io/badge/made%20by-Amanda%20Santos-and-Carla%Ponciano-gree">
+    <img alt="Made by" src="https://img.shields.io/badge/made%20by-Amanda%20Santos%20and%20Carla%Ponciano-gree">
   </a>
   
   <img alt="Repository size" src="https://img.shields.io/github/repo-size/amanda-santos/bookswap">
