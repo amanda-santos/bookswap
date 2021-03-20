@@ -1,3 +1,4 @@
+const axios = require('axios');
 const Book = require('../models/Book');
 
 module.exports = {
@@ -30,5 +31,19 @@ module.exports = {
         });
 
         return res.json(book);
+    },
+
+    async search(request, response) {
+        const { title, author } = request.body;
+        let books = [];
+
+        await axios.get(`https://www.googleapis.com/books/v1/volumes?q=${title}+inauthor:${author}`)
+            .then(res => {
+                if (res.data.items.length > 0) {
+                    books = res.data.items;
+                }
+            });
+
+        return response.json(books);
     }
 }

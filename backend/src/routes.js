@@ -12,6 +12,7 @@ routes.put('/user/:id', UserController.update);
 
 routes.get('/books', BookController.index);
 routes.post('/books', BookController.store);
+routes.post('/books/search', BookController.search);
 
 routes.get('/book/:book_id/user/:user_id', BooksUsersController.index);
 routes.post('/book/:book_id/user/:user_id', BooksUsersController.store);
