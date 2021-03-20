@@ -3,7 +3,10 @@ const { Model, DataTypes } = require('sequelize');
 class Book extends Model {
     static init(sequelize) {
         super.init({
-            id: DataTypes.INTEGER,
+            id: {
+                type: DataTypes.STRING,
+                primaryKey: true,
+            },
             title: DataTypes.STRING,
             authors: DataTypes.JSON,
             description: DataTypes.TEXT,
@@ -15,6 +18,10 @@ class Book extends Model {
             sequelize
         })
     }
+
+    static associate(models) {
+        this.belongsToMany(models.User, { foreignKey: 'user_id', through: 'books_users', as: 'users' });
+    }
 }
 
-module.exports = User;
+module.exports = Book;

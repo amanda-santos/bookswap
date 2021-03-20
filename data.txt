@@ -1,0 +1,31 @@
+book {
+id
+title
+authors
+description
+categories
+average_rating
+ratings_count
+image
+}
+
+user {
+id
+name
+email
+phone
+username
+password
+bio
+profile_picture
+books_swaped
+reputation
+}
+
+book_user {
+id
+user_id
+book_id
+swap
+favorite
+}
