@@ -1,5 +1,6 @@
 import React from 'react'
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
+import { createStackNavigator } from '@react-navigation/stack';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons'
 
@@ -10,6 +11,7 @@ import Notifications from './pages/Notifications'
 import Profile from './pages/Profile'
 
 const Stack = createMaterialBottomTabNavigator();
+const HomeStack = createStackNavigator();
 
 function Routes () {
   return (
@@ -18,16 +20,17 @@ function Routes () {
       activeColor="#FFF952"
       inactiveColor="#FFF"
       labelStyle={{ fontSize: 12 }}
-      barStyle={{ backgroundColor: '#193C58' }}>
+      barStyle={{ backgroundColor: '#193C58' }}
+      >
 
     <Stack.Screen 
-      name="Início" 
-      component={ Main }
+      name="Início"
+      component={HomeStackScreen}
       options={{
-        tabBarLabel: 'Início',
+        name: 'Início',
         tabBarIcon: ({ color }) => (
           <MaterialIcons name="home" size={25} color={color} />
-        ),
+        )
       }}
     />
 
@@ -80,3 +83,19 @@ function Routes () {
 }
 
 export default Routes
+
+const HomeStackScreen = ({navigation}) => (
+  <HomeStack.Navigator screenOptions={{
+          headerStyle: {
+            backgroundColor: '#193C58'
+          },
+          headerTintColor: '#fff',
+      }}>
+      <HomeStack.Screen name="Home" component={Main} options={{
+        title:'Início',
+        headerTitleStyle: {
+          textAlign: 'center',
+        },
+      }} />
+  </HomeStack.Navigator>
+);
