@@ -3,7 +3,7 @@ const BooksUsers = require('../models/BooksUsers');
 const User = require('../models/User');
 
 module.exports = {
-    async index(req, res) {
+    async indexBook(req, res) {
         const { user_id } = req.params;
         const { book_id } = req.params;
 
@@ -26,6 +26,24 @@ module.exports = {
             }
         });
         return res.json(bookUser);
+    },
+
+    async indexBooks(req, res) {
+        const { user_id } = req.params;
+
+        const user = await User.findByPk(user_id);
+
+        if (!user) {
+            return res.status(400).json({ error: 'User not found' });
+        }
+
+        const booksUser = await BooksUsers.findAll({
+            where: {
+                user_id,
+            }
+        });
+
+        return res.json(booksUser);
     },
 
     async store(req, res) {
