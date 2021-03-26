@@ -14,8 +14,9 @@ routes.get('/books', BookController.index);
 routes.post('/books', BookController.store);
 routes.post('/books/search', BookController.search);
 
-routes.get('/book/:book_id/user/:user_id', BooksUsersController.index);
-routes.post('/book/:book_id/user/:user_id', BooksUsersController.store);
-routes.put('/book/:book_id/user/:user_id', BooksUsersController.update);
+routes.get('/user/:user_id/book/:book_id', BooksUsersController.indexBook);
+routes.get('/user/:user_id/books', BooksUsersController.indexBooks);
+routes.post('/user/:user_id/book/:book_id', BooksUsersController.store);
+routes.put('/user/:user_id/book/:book_id', BooksUsersController.update);
 
 module.exports = routes;
