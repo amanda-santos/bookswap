@@ -9,6 +9,7 @@ import Exchange from './pages/Exchange'
 import Explore from './pages/Explore'
 import Notifications from './pages/Notifications'
 import Profile from './pages/Profile'
+import Book from './pages/Book'
 
 const Stack = createMaterialBottomTabNavigator();
 const HomeStack = createStackNavigator();
@@ -25,7 +26,7 @@ function Routes () {
 
     <Stack.Screen 
       name="Início"
-      component={HomeStackScreen}
+      component={ HomeStackScreen }
       options={{
         name: 'Início',
         tabBarIcon: ({ color }) => (
@@ -36,7 +37,7 @@ function Routes () {
 
     <Stack.Screen 
       name="Explorar" 
-      component={ Explore }
+      component={ ExploreStackScreen }
       options={{
         tabBarLabel: 'Explorar',
         tabBarIcon: ({ color }) => (
@@ -91,9 +92,49 @@ const HomeStackScreen = ({navigation}) => (
           },
           headerTintColor: '#fff',
       }}>
-      <HomeStack.Screen name="Home" component={Main} options={{
-        title:'Início',
-        headerTitleStyle: {
+      <HomeStack.Screen 
+        name="Home" 
+        component={Main} 
+        options={{
+          title:'Início',
+          headerTitleStyle: {
+          textAlign: 'center',
+        },
+      }} />
+      <HomeStack.Screen 
+        name="Explorar" 
+        component={Explore} 
+        options={{
+          title:'Pesquisar',
+          headerTitleStyle: {
+          textAlign: 'center',
+        },
+      }} />
+      <HomeStack.Screen 
+        name="Book" 
+        component={Book} 
+        options={{
+          title:'Book',
+          headerTitleStyle: {
+          textAlign: 'center',
+        },
+      }} />
+  </HomeStack.Navigator>
+);
+
+const ExploreStackScreen = ({navigation}) => (
+  <HomeStack.Navigator screenOptions={{
+          headerStyle: {
+            backgroundColor: '#193C58'
+          },
+          headerTintColor: '#fff',
+      }}>
+      <HomeStack.Screen 
+        name="Explorar" 
+        component={Explore} 
+        options={{
+          title:'Pesquisar',
+          headerTitleStyle: {
           textAlign: 'center',
         },
       }} />

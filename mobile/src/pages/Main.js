@@ -1,4 +1,5 @@
 import React, { useState }  from 'react'
+import { MaterialIcons } from '@expo/vector-icons'
 import { 
     ImageBackground, 
     FlatList, 
@@ -9,7 +10,6 @@ import {
     View, 
     Dimensions 
 } from "react-native";
-import { MaterialIcons } from '@expo/vector-icons'
 
 const DATA = [
     {
@@ -63,7 +63,7 @@ const DATA = [
     },
   ];
 
-  const colums = 2
+const colums = 2
 
 function isFavorite (props) {
     return props 
@@ -72,7 +72,7 @@ function isFavorite (props) {
 }
 
 const Item = ({ item, onPress, style }) => (
-    <TouchableOpacity onPress={onPress} style={styles.touchableOpacity}>
+    <TouchableOpacity style={styles.touchableOpacity}>
         <ImageBackground source={{ uri: item.imageUrl}} style={styles.image} resizeMode= 'cover'>
             <View style={styles.containerList}>
                 <View style={styles.containerListDescription}>
@@ -84,7 +84,7 @@ const Item = ({ item, onPress, style }) => (
     </TouchableOpacity>
 );
 
-function Main () {
+function Main ({ navigation }) {
     const [selectedId, setSelectedId] = useState(null);
 
     const renderItem = ({ item }) => {
@@ -94,7 +94,9 @@ function Main () {
         return (
             <Item
                 item={item}
-                onPress={() => setSelectedId(item.key)}
+                onPress={() => { 
+                    navigation.navigate('Book', { item })
+                }} 
             />
         );
     };
