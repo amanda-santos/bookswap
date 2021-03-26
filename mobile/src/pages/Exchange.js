@@ -3,9 +3,11 @@ import { View, Text, StyleSheet } from 'react-native';
 
 function Exchange () {
     return (
+        <>
         <View style={styles.container}>
             <Text>Exchange!</Text>
         </View>
+        </>
     )
 }
 
