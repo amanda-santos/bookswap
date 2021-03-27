@@ -7,6 +7,11 @@ module.exports = {
         return res.json(books);
     },
 
+    async indexById(book_id) {
+        const book = await Book.findByPk(book_id);
+        return book;
+    },
+
     async store(req, res) {
         const {
             id,

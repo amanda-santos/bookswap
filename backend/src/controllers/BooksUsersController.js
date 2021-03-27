@@ -1,6 +1,7 @@
 const Book = require('../models/Book');
 const BooksUsers = require('../models/BooksUsers');
 const User = require('../models/User');
+const BookController = require('./BookController');
 
 module.exports = {
     async indexBook(req, res) {
@@ -25,7 +26,13 @@ module.exports = {
                 user_id
             }
         });
-        return res.json(bookUser);
+
+        return res.json(await Promise.all(
+            bookUser.map(async (b) => {
+                const bookInfo = await Book.findByPk(b.book_id)
+                return { swap: b.swap, favorite: b.favorite, ...bookInfo.dataValues }
+            })
+        ));
     },
 
     async indexBooks(req, res) {
@@ -43,7 +50,12 @@ module.exports = {
             }
         });
 
-        return res.json(booksUser);
+        return res.json(await Promise.all(
+            booksUser.map(async (b) => {
+                const bookInfo = await Book.findByPk(b.book_id)
+                return { swap: b.swap, favorite: b.favorite, ...bookInfo.dataValues }
+            })
+        ));
     },
 
     async store(req, res) {
