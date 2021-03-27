@@ -114,9 +114,9 @@ const HomeStackScreen = ({navigation}) => (
         name="Book" 
         component={Book} 
         options={{
-          title:'Book',
+          title:'Visualizar livro',
           headerTitleStyle: {
-          textAlign: 'center',
+            textAlign: 'center',
         },
       }} />
   </HomeStack.Navigator>
