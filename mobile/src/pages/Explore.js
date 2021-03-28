@@ -1,27 +1,21 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, FlatList } from 'react-native';
+import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, FlatList, SafeAreaView } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import axios from 'axios';
 
 import api from '../services/api';
 
-function Explore() {
+function Explore({ navigation }) {
+    const userId = 1
     const [books, setBooks] = useState([]);
     const [value, setValue] = useState("");
-    // const [total, setTotal] = useState(0);
-
-    // paginação infinita
-    //   const [page, setPage] = useState(1);
+    const [apiKey, setApiKey] = useState("AIzaSyAJuZ1hNfpktAk7BXiH2lQtBlDS9dXxDtM");
     const [loading, setLoading] = useState(false);
 
     async function loadBooks() {
         if (loading) {
             return;
         }
-
-        // if (total > 0 && books.length === total) {
-        //   return;
-        // }
 
         setLoading(true);
 
@@ -31,47 +25,46 @@ function Explore() {
         //     //   params: { page }
         // });
 
-        await axios.get(`https://www.googleapis.com/books/v1/volumes?q=${value}`)
-            .then(res => {
-                if (res.data.items.length > 0) {
-                    setBooks(res.data.items);
+        await axios.get(`https://www.googleapis.com/books/v1/volumes?q=${value}&key=${apiKey}&maxResults=40`)
+            .then(response => {
+                if (response.data.items.length > 0) {
+                    setBooks(response.data.items);
                 }
             });
 
-        // somando vetor de incidents atual com o que vem da response
-        // setBooks(response.data);
-        // console.log(response.data)
-        // setTotal(response.headers['x-total-count']);
-        // setPage(page + 1);
         setLoading(false);
     }
 
     const handleSearch = async () => {
-        console.log(value);
         loadBooks();
-        // let books = [];
-
-        // await axios.get(`https://www.googleapis.com/books/v1/volumes?q=${value}`)
-        //     .then(res => {
-        //         if (res.data.items.length > 0) {
-        //             books = res.data.items;
-        //         }
-        //     });
-
-        // console.log('cadee', books)
 
         // api.post('books/search', {
         //     title: value
         // }).then((res) => {
-        //     console.log('oiiiiii')
-        //     console.log(res)
+        //     console.log(res);
         // }).catch((err) => {
         //     console.log('Erro ao cadastrar: ' + err);
         // })
     }
 
+    const handleNavigateToDetail = (book) => {
+        const item = {
+            swap: false,
+            favorite: false,
+            id: book.id,
+            title: book.volumeInfo.title,
+            authors: book.volumeInfo.authors.toString(),
+            description: book.volumeInfo.description,
+            categories: book.volumeInfo.categories,
+            average_rating: book.volumeInfo.averageRating,
+            ratings_count: book.volumeInfo.ratingsCount,
+            image: book.volumeInfo.imageLinks ? book.volumeInfo.imageLinks.thumbnail : ""
+        }
+        navigation.navigate('Book', { item, userId })
+    }
+
     return (
-        <View>
+        <SafeAreaView style={styles.container}>
             <View style={styles.searchForm}>
                 <TextInput
                     style={styles.searchInput}
@@ -89,40 +82,22 @@ function Explore() {
             </View>
             <FlatList
                 data={books}
-                // style={styles.incidentList}
+                style={styles.booksList}
                 keyExtractor={book => String(book.id)}
                 showsVerticalScrollIndicator={true}
                 // onEndReached={loadIncidents}
                 onEndReachedThreshold={0.2}
                 renderItem={({ item: book }) => (
-                    <View>
-                        <Image source={{ uri: book.volumeInfo.imageLinks.smallThumbnail }}></Image>
-                        <Text>{book.id}, {book.volumeInfo.title}</Text>
-                        {/* <Text style={styles.incidentProperty}>ONG:</Text>
-            <Text style={styles.incidentValue}>{incident.name}</Text>
-
-            <Text style={styles.incidentProperty}>CASO:</Text>
-            <Text style={styles.incidentValue}>{incident.title}</Text>
-
-            <Text style={styles.incidentProperty}>VALOR:</Text>
-            <Text style={styles.incidentValue}>
-              {Intl.NumberFormat('pt-BR', { 
-                style: 'currency', 
-                currency: 'BRL' 
-              }).format(incident.value)}
-            </Text>
-
-            <TouchableOpacity 
-              style={styles.detailsButton}
-              onPress={() => navigateToDetail(incident)}
-            >
-              <Text style={styles.detailsButtonText}>Ver mais detalhes</Text>
-              <Feather name="arrow-right" size={16} color="#E02041"></Feather>
-            </TouchableOpacity> */}
-                    </View>
+                    <TouchableOpacity
+                        style={styles.book}
+                        onPress={() => handleNavigateToDetail(book)}
+                    >
+                        <Image style={styles.image} source={{ uri: book.volumeInfo.imageLinks && book.volumeInfo.imageLinks.smallThumbnail }}></Image>
+                        <Text>{book.volumeInfo.title}</Text>
+                    </TouchableOpacity>
                 )}
             />
-        </View>
+        </SafeAreaView>
     )
 }
 
@@ -131,6 +106,7 @@ export default Explore
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center'
     },
@@ -166,5 +142,27 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         marginLeft: 15
+    },
+    booksList: {
+        marginTop: 30,
+        marginLeft: 10,
+        marginRight: 15,
+    },
+    book: {
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+        marginTop: 5,
+        margin: 10,
+        paddingBottom: 10,
+        borderBottomWidth: 1,
+        borderBottomColor: "#D4D9D5"
+    },
+    image: {
+        width: 40,
+        height: 40,
+        borderRadius: 30,
+        marginRight: 10
     }
 })

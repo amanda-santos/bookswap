@@ -40,9 +40,10 @@ module.exports = {
 
     async search(request, response) {
         const { title, author } = request.body;
+        const apiKey = "AIzaSyAJuZ1hNfpktAk7BXiH2lQtBlDS9dXxDtM";
         let books = [];
 
-        await axios.get(`https://www.googleapis.com/books/v1/volumes?q=${title}+inauthor:${author}`)
+        await axios.get(`https://www.googleapis.com/books/v1/volumes?q=${title}+inauthor:${author}&key=${apiKey}&maxResults=40`)
             .then(res => {
                 if (res.data.items.length > 0) {
                     books = res.data.items;

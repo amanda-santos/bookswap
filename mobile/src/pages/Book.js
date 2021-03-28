@@ -10,10 +10,7 @@ function Book({ route }) {
 
     const [favorite, setFavorite] = useState(book.favorite);
     const [swap, setSwap] = useState(book.swap);
-
-    console.log(userId);
-
-    const swapButtonColor = '#193C58';
+    const [data, setData] = useState([]);
 
     function starsRating(props) {
         let quantities = []
@@ -58,28 +55,58 @@ function Book({ route }) {
 
     const handleSetFavorite = () => {
         setFavorite(!favorite);
-        console.log('favorite', favorite);
         handleUpdateBook();
         alertFavorite();
     }
 
     const handleSetSwap = () => {
         setSwap(!swap);
-        console.log('swap', swap);
         handleUpdateBook();
         alertSwap();
     }
 
     const handleUpdateBook = () => {
-        api.put(`user/${userId}/book/${book.id}`, {
-            favorite,
-            swap
-        }).then((res) => {
-            console.log('oiiiiii')
-            console.log(res)
-        }).catch((err) => {
-            console.log('Erro ao cadastrar: ' + err);
+        api.get(`user/${userId}/books`).then(response => {
+            setData(response.data);
         })
+
+        if (data.some(d => d.id === book.id)) {
+            api.put(`user/${userId}/book/${book.id}`, {
+                favorite,
+                swap
+            }).then((res) => {
+                console.log(res)
+            }).catch((err) => {
+                console.log('Erro ao cadastrar: ' + err);
+            })
+        } else {
+            const { id,
+                title,
+                authors,
+                description,
+                categories,
+                average_rating,
+                ratings_count,
+                image,
+                favorite,
+                swap } = book;
+            api.post(`user/${userId}/book/${book.id}`, {
+                id,
+                title,
+                authors,
+                description,
+                categories,
+                average_rating,
+                ratings_count,
+                image,
+                favorite,
+                swap,
+            }).then((res) => {
+                console.log(res)
+            }).catch((err) => {
+                console.log('Erro ao cadastrar: ' + err);
+            })
+        }
     }
 
     return (
