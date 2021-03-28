@@ -1,37 +1,37 @@
-import React, { useState, useEffect }  from 'react'
+import React, { useState, useEffect } from 'react'
 import { MaterialIcons } from '@expo/vector-icons'
-import { 
-    ImageBackground, 
-    FlatList, 
-    SafeAreaView, 
-    StyleSheet, 
-    Text, 
-    TouchableOpacity, 
-    View, 
-    Dimensions 
+import {
+    ImageBackground,
+    FlatList,
+    SafeAreaView,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
+    Dimensions
 } from "react-native";
 import api from '../services/api'
 
 const colums = 2
 
-function isFavorite (props) {
-    return props 
-        ? <MaterialIcons name="favorite" size={20} style={styles.icon} /> 
+function isFavorite(props) {
+    return props
+        ? <MaterialIcons name="favorite" size={20} style={styles.icon} />
         : <MaterialIcons name="favorite-border" size={20} style={styles.icon} />
 }
 
-function Main ({ navigation }) {
+function Main({ navigation }) {
     const [data, setData] = useState([])
     const [selectedId, setSelectedId] = useState(null);
-    const userId = 4
+    const userId = 1
 
     const onPressed = (item) => {
-        navigation.navigate('Book', { item })
+        navigation.navigate('Book', { item, userId })
     }
 
     const Item = ({ item, onPress, style }) => (
         <TouchableOpacity style={styles.touchableOpacity} onPress={() => onPressed(item)}>
-            <ImageBackground source={{ uri: item.image}} style={styles.image} resizeMode= 'cover'>
+            <ImageBackground source={{ uri: item.image }} style={styles.image} resizeMode='cover'>
                 <View style={styles.containerList}>
                     <View style={styles.containerListDescription}>
                         <Text style={styles.bookName}>{item.title}</Text>
@@ -44,7 +44,7 @@ function Main ({ navigation }) {
 
     useEffect(() => {
         api.get(`user/${userId}/books`).then(response => {
-          setData(response.data)
+            setData(response.data)
         })
     }, [])
 
@@ -61,13 +61,13 @@ function Main ({ navigation }) {
 
     const formatData = (data, numColumns) => {
         const numberOfFullRows = Math.floor(data.length / numColumns);
-        
+
         let numberOfElementsLastRow = data.length - (numberOfFullRows * numColumns);
         while (numberOfElementsLastRow !== numColumns && numberOfElementsLastRow !== 0) {
             data.push({ key: `blank-${numberOfElementsLastRow}`, empty: true });
             numberOfElementsLastRow++;
         }
-        
+
         return data;
     }
 
@@ -95,14 +95,14 @@ const styles = StyleSheet.create({
         fontSize: 15,
         alignContent: 'center',
         padding: 2,
-    }, 
+    },
     bookDescription: {
         color: '#666',
         marginTop: 5,
         alignContent: 'center',
         padding: 5,
         fontSize: 12,
-    }, 
+    },
     imageUrl: {
         width: 100,
         height: 150,
@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
         margin: 2,
     },
     touchableOpacity: {
-        backgroundColor: '#FFF', 
+        backgroundColor: '#FFF',
         flex: 1,
         justifyContent: "center"
     }

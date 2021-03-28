@@ -1,21 +1,43 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, Alert } from 'react-native';
-import { MaterialIcons } from '@expo/vector-icons'
+import { MaterialIcons } from '@expo/vector-icons';
 
-function Book ({ route }) {
-   const book = route.params.item
+import api from '../services/api';
 
-   function starsRating(props) {
+function Book({ route }) {
+    const book = route.params.item;
+    const userId = route.params.userId;
+
+    const [favorite, setFavorite] = useState(book.favorite);
+    const [swap, setSwap] = useState(book.swap);
+
+    console.log(userId);
+
+    const swapButtonColor = '#193C58';
+
+    function starsRating(props) {
         let quantities = []
-        for(let star=0; star < props; star++){
-            quantities.push(<MaterialIcons key={star} name="star" size={20} color="#000" />)
+        for (let star = 0; star < props; star++) {
+            quantities.push(<MaterialIcons key={star} name="star" size={30} color="#E8E34A" />)
         }
 
-        return quantities
-   }
+        if (props < 5) {
+            for (let star = 0; star < 5 - props; star++) {
+                quantities.push(<MaterialIcons key={`missing-${star}`} name="star" size={30} color="#D4D9D5" />)
+            }
+        }
+
+        if (quantities.length > 5) {
+            while (quantities.length != 5) {
+                quantities.pop();
+            }
+        }
+
+        return quantities;
+    }
 
     const alertFavorite = () => {
-        Alert.alert(
+        !favorite && Alert.alert(
             "",
             "Livro favoritado :)",
             [
@@ -24,22 +46,48 @@ function Book ({ route }) {
         )
     }
 
-    const alertExchange = () => {
-        Alert.alert(
+    const alertSwap = () => {
+        !swap && Alert.alert(
             "",
             "Pronto! Esse livro foi marcado para troca. Agora é só esperar alguém entrar em contato :)",
             [
-                { text: "OK", onPress: () => console.log("OK alertExchange") }
+                { text: "OK", onPress: () => console.log("OK alertSwap") }
             ]
         )
+    }
+
+    const handleSetFavorite = () => {
+        setFavorite(!favorite);
+        console.log('favorite', favorite);
+        handleUpdateBook();
+        alertFavorite();
+    }
+
+    const handleSetSwap = () => {
+        setSwap(!swap);
+        console.log('swap', swap);
+        handleUpdateBook();
+        alertSwap();
+    }
+
+    const handleUpdateBook = () => {
+        api.put(`user/${userId}/book/${book.id}`, {
+            favorite,
+            swap
+        }).then((res) => {
+            console.log('oiiiiii')
+            console.log(res)
+        }).catch((err) => {
+            console.log('Erro ao cadastrar: ' + err);
+        })
     }
 
     return (
         <ScrollView>
             <View style={styles.container}>
-                <Image style={styles.bookImage} source={{uri: book.image}}/>
+                <Image style={styles.bookImage} source={{ uri: book.image }} />
                 <Text style={styles.bookTitle}>{book.title}</Text>
-                <Text style={styles.bookAuthor}>{book.authors}</Text>
+                <Text style={styles.bookAuthor}>{(book.authors.replace("[", "").replace("\"", "").replace("]", "").replace("\"", ""))}</Text>
 
                 <View style={styles.ratingBox}>
                     {starsRating(book.average_rating)}
@@ -48,20 +96,20 @@ function Book ({ route }) {
             </View>
 
             <View style={styles.containerButton}>
-            <Text style={styles.bookSinopse}>Sinopse</Text>
+                <Text style={styles.bookSinopse}>Sinopse</Text>
                 <Text style={styles.bookDescription}>{book.description}</Text>
                 <View style={styles.buttons}>
-                    <TouchableOpacity onPress={alertFavorite} style={styles.buttonContainer}> 
+                    <TouchableOpacity onPress={handleSetFavorite} style={styles.buttonContainer}>
                         <View style={styles.buttonFavorite}>
-                            <MaterialIcons name="favorite" size={20} color="#000" style={styles.icon}></MaterialIcons>
-                            <Text style={styles.buttonTextFavorite}>Adicionar aos favoritos</Text>                            
+                            <MaterialIcons name={favorite ? 'favorite' : 'favorite-outline'} size={20} color="#000" style={styles.icon}></MaterialIcons>
+                            <Text style={styles.buttonTextFavorite}>{favorite ? 'Remover dos favoritos' : 'Adicionar aos favoritos'}</Text>
                         </View>
                     </TouchableOpacity>
 
-                    <TouchableOpacity onPress={alertExchange} style={styles.buttonContainer}> 
-                        <View style={styles.buttonExchange}>
-                            <MaterialIcons name="compare-arrows" size={20} color="#FFF952" style={styles.icon}/>
-                            <Text style={styles.buttonTextExchange}>Quero trocar</Text>
+                    <TouchableOpacity onPress={handleSetSwap} style={styles.buttonContainer}>
+                        <View style={swap ? styles.buttonSwapTrue : styles.buttonSwapFalse}>
+                            <MaterialIcons name="compare-arrows" size={20} color="#FFF952" style={styles.icon} />
+                            <Text style={swap ? styles.buttonTextSwapTrue : styles.buttonTextSwapFalse}>{swap ? 'Desistir de trocar' : 'Quero trocar'}</Text>
                         </View>
                     </TouchableOpacity>
                 </View>
@@ -74,14 +122,14 @@ export default Book
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1, 
-        alignItems: 'center', 
-        justifyContent: 'center' 
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     containerButton: {
-        flex: 1, 
+        flex: 1,
     },
-    ratingBox : {
+    ratingBox: {
         marginTop: 5,
         flexDirection: 'row',
         justifyContent: 'space-between'
@@ -122,8 +170,11 @@ const styles = StyleSheet.create({
     buttons: {
         flexDirection: 'column',
         justifyContent: 'space-between',
+        marginTop: 16
     },
     buttonFavorite: {
+        flex: 1,
+        flexDirection: "row",
         width: '100%',
         height: 50,
         backgroundColor: '#FFF952',
@@ -132,11 +183,26 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         padding: 15
     },
-    buttonExchange: {
+    buttonSwapFalse: {
+        flex: 1,
+        flexDirection: "row",
         width: '100%',
         height: 50,
         backgroundColor: '#193C58',
         borderRadius: 25,
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 15
+    },
+    buttonSwapTrue: {
+        flex: 1,
+        flexDirection: "row",
+        width: '100%',
+        height: 50,
+        backgroundColor: '#fff',
+        color: '#000',
+        borderRadius: 25,
+        borderColor: '#000',
         justifyContent: 'center',
         alignItems: 'center',
         padding: 15
@@ -146,8 +212,13 @@ const styles = StyleSheet.create({
         fontSize: 15,
         fontWeight: 'bold',
     },
-    buttonTextExchange: {
+    buttonTextSwapFalse: {
         color: '#FFF',
+        fontSize: 15,
+        fontWeight: 'bold',
+    },
+    buttonTextSwapTrue: {
+        color: '#000',
         fontSize: 15,
         fontWeight: 'bold',
     },
