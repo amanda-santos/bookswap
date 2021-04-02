@@ -6,7 +6,7 @@ import { MaterialIcons } from '@expo/vector-icons'
 import api from '../services/api'
 //import { connect, disconnect, subscribeToNewbooks } from '../services/socket'
 
-function Exchange () {
+function Exchange({ navigation }) {
     const [currentRegion, setCurrentRegion] = useState(null)
     const [books, setBooks] = useState([])
     const [bookSearched, setBookSearched] = useState('')
@@ -19,7 +19,7 @@ function Exchange () {
                 const { coords } = await getCurrentPositionAsync({
                     enableHighAccuracy: true,
                 })
-                
+
                 const response = await getCurrentPositionAsync({
                     enableHighAccuracy: true,
                 })
@@ -48,13 +48,14 @@ function Exchange () {
         const { latitude, longitude } = currentRegion
 
         connect(
-            latitude, 
-            longitude, 
+            latitude,
+            longitude,
             bookSearched,
         )
     }
 
     async function loadBooks() {
+        navigation.navigate('Profile', {});
         const { latitude, longitude } = currentRegion
 
         try {
@@ -67,7 +68,7 @@ function Exchange () {
             })
 
             setBooks(response.data.books)
-        } catch(err) {
+        } catch (err) {
             console.error(err);
         }
 
@@ -78,27 +79,28 @@ function Exchange () {
         setCurrentRegion(region)
     }
 
-    if(!currentRegion) return null
+    if (!currentRegion) return null
 
     return (
         <>
-            <MapView 
-                onRegionChangeComplete={handleRegionChange} 
-                initialRegion={currentRegion} 
+            <MapView
+                onRegionChangeComplete={handleRegionChange}
+                initialRegion={currentRegion}
                 style={styles.map}
+                onPoiClick={() => console.log('OIIIII')}
             >
                 {books.map(book => (
-                    <Marker 
+                    <Marker
                         key={book._id}
-                        coordinate={{ 
-                            latitude: book.location.coordinates[1], 
+                        coordinate={{
+                            latitude: book.location.coordinates[1],
                             longitude: book.location.coordinates[0]
                         }}
                     >
-                        <Image 
-                            style={styles.avatar} 
-                            source={{ uri: book.avatar_url }} 
-                        /> 
+                        <Image
+                            style={styles.avatar}
+                            source={{ uri: book.avatar_url }}
+                        />
 
                         <Callout onPress={() => {
                             navigation.navigate('Exchange', { github_username: book.github_username })
@@ -123,7 +125,7 @@ function Exchange () {
                     onChangeText={setBookSearched}
                 />
 
-                <TouchableOpacity onPress={loadBooks} style={styles.loadButton}> 
+                <TouchableOpacity onPress={loadBooks} style={styles.loadButton}>
                     <MaterialIcons name="search" size={20} color="#FFF952" />
                 </TouchableOpacity>
             </View>
@@ -135,28 +137,28 @@ export default Exchange
 
 const styles = StyleSheet.create({
     map: {
-        flex : 1
+        flex: 1
     },
     avatar: {
         width: 54,
         height: 54,
         borderRadius: 4,
-        borderWidth: 4, 
+        borderWidth: 4,
         borderColor: '#FFF'
     },
     callout: {
-      width: 260
+        width: 260
     },
     bookName: {
-      fontWeight: 'bold',
-      fontSize: 16
-    }, 
+        fontWeight: 'bold',
+        fontSize: 16
+    },
     bookBio: {
-      color: '#666',
-      marginTop: 5
-    }, 
+        color: '#666',
+        marginTop: 5
+    },
     bookbookSearched: {
-      marginTop: 5
+        marginTop: 5
     },
     searchForm: {
         position: 'absolute',
@@ -171,7 +173,7 @@ const styles = StyleSheet.create({
         height: 50,
         backgroundColor: '#FFF',
         color: '#333',
-        borderRadius: 25, 
+        borderRadius: 25,
         paddingHorizontal: 20,
         fontSize: 16,
         shadowColor: '#000',
