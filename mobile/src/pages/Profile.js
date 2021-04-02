@@ -11,6 +11,7 @@ function Profile({ route }) {
         id: 2,
         name: 'Jéssica Martins',
         bio: '21 anos, estudante de Administração. Apaixonada por livros.',
+        profilePicture: imgProfile,
         phone: '5531986250620',
         swaps: 12,
         reputation: 4,
@@ -24,7 +25,7 @@ function Profile({ route }) {
 
     return (
         <View style={styles.container}>
-            <Image style={styles.image} source={imgProfile} />
+            <Image style={styles.image} source={user.profilePicture} />
             <Text style={styles.name}>{user.name}</Text>
             <Text style={styles.bio}>{user.bio}</Text>
             <Text style={styles.swaps}>Já fez trocas com {user.swaps} pessoas</Text>
