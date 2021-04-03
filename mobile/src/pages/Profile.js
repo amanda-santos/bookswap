@@ -11,7 +11,7 @@ function Profile({ route }) {
         id: 2,
         name: 'Jéssica Martins',
         bio: '21 anos, estudante de Administração. Apaixonada por livros.',
-        profilePicture: imgProfile,
+        profilePicture: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80',
         phone: '5531986250620',
         swaps: 12,
         reputation: 4,
@@ -25,7 +25,7 @@ function Profile({ route }) {
 
     return (
         <View style={styles.container}>
-            <Image style={styles.image} source={user.profilePicture} />
+            <Image style={styles.image} source={{uri: user.profilePicture}} />
             <Text style={styles.name}>{user.name}</Text>
             <Text style={styles.bio}>{user.bio}</Text>
             <Text style={styles.swaps}>Já fez trocas com {user.swaps} pessoas</Text>

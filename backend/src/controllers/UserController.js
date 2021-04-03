@@ -15,7 +15,7 @@ module.exports = {
             password,
             bio,
             profile_picture,
-            books_swaped,
+            books_swapped,
             reputation
         } = req.body;
 
@@ -27,7 +27,7 @@ module.exports = {
             password,
             bio,
             profile_picture,
-            books_swaped,
+            books_swapped,
             reputation
         });
 

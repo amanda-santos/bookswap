@@ -48,7 +48,7 @@ function Routes () {
 
     <Stack.Screen 
       name="Trocar" 
-      component={ Exchange } 
+      component={ ExchangeStackScreen } 
       options={{
         tabBarLabel: 'Trocar',
         tabBarIcon: ({ color }) => (
@@ -136,6 +136,34 @@ const ExploreStackScreen = ({navigation}) => (
           title:'Pesquisar',
           headerTitleStyle: {
           textAlign: 'center',
+        },
+      }} />
+  </HomeStack.Navigator>
+);
+
+const ExchangeStackScreen = ({navigation}) => (
+  <HomeStack.Navigator screenOptions={{
+          headerStyle: {
+            backgroundColor: '#193C58'
+          },
+          headerTintColor: '#fff',
+      }}>
+      <HomeStack.Screen 
+        name="Exhange" 
+        component={Exchange}
+        options={{
+          title:'Trocar',
+          headerTitleStyle: {
+          textAlign: 'center'
+        },
+      }} />
+      <HomeStack.Screen 
+        name="Profile" 
+        component={Profile} 
+        options={{
+          title:'Perfil',
+          headerTitleStyle: {
+          textAlign: 'center'
         },
       }} />
   </HomeStack.Navigator>
